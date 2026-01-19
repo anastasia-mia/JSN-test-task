@@ -1,0 +1,56 @@
+.greeting{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 70px;
+    padding-top: 50px;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.greeting_title{
+    font-size: 82px;
+    color: #B8850F;
+    text-align: center;
+}
+
+.greeting_text{
+    font-size: 32px;
+    text-align: center;
+}
+
+.greeting button{
+    margin-top: 50px;
+}
+
+.greeting_heroes{
+    display: flex;
+    position: absolute;
+    justify-content: space-around;
+    bottom: 7%;
+    width: 100%;
+}
+
+.greeting_heroes img{
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 576px){
+    .greeting{
+        padding-top: 40px;
+        gap: 80px;
+    }
+
+    .greeting_title{
+        font-size: 44px;
+    }
+
+    .greeting_text{
+        font-size: 24px;
+    }
+
+    .greeting_heroes img{
+        width: 80px
+    }
+}
