@@ -1,6 +1,9 @@
 import {CreateSuperheroDto, UpdateSuperheroDto} from "./superhero.dto";
 import {prisma} from "../../config/db";
 import {stripUndefined} from "../../shared/utils/strip-undefined";
+import {ApiError} from "../../shared/errors/api-error";
+import {PaginatedResponse, SuperheroDetailsResponse, SuperheroListItemResponse} from "./superhero.types";
+import {handlePrismaNotFound} from "../../shared/errors/prisma-errors";
 
 const uniqueSuperpowers = (data: string[]):string[] => {
     return Array.from(new Set(
@@ -8,10 +11,10 @@ const uniqueSuperpowers = (data: string[]):string[] => {
     ));
 }
 
-export const create = async(superheroData: CreateSuperheroDto) => {
+export const create = async(superheroData: CreateSuperheroDto): Promise<SuperheroDetailsResponse> => {
     const normalizedSuperpowers: string[] = uniqueSuperpowers(superheroData.superpowers)
 
-    const newSuperhero = await prisma.superhero.create({
+    const newSuperhero= await prisma.superhero.create({
         data: {
             nickname: superheroData.nickname,
             real_name: superheroData.real_name,
@@ -24,11 +27,17 @@ export const create = async(superheroData: CreateSuperheroDto) => {
     return newSuperhero;
 }
 
-export const findById = async(id:number) => {
-    return await prisma.superhero.findUnique({where: {id}});
+export const getById = async(id:number): Promise<SuperheroDetailsResponse> => {
+    const hero = await prisma.superhero.findUnique({where: {id}});
+
+    if (!hero) {
+        throw ApiError.notFound("Superhero not found");
+    }
+
+    return hero;
 }
 
-export const update = async(id: number, newSuperheroData: UpdateSuperheroDto) => {
+export const update = async(id: number, newSuperheroData: UpdateSuperheroDto): Promise<SuperheroDetailsResponse> => {
     const dataToUpdate: UpdateSuperheroDto = { ...newSuperheroData };
 
     if(dataToUpdate.superpowers){
@@ -37,14 +46,49 @@ export const update = async(id: number, newSuperheroData: UpdateSuperheroDto) =>
 
     const cleanData= stripUndefined(dataToUpdate);
 
-    const updatedSuperhero = await prisma.superhero.update({
-        where: {id},
-        data: cleanData
-    });
+    try{
+        const updatedSuperhero = await prisma.superhero.update({
+            where: {id},
+            data: cleanData
+        });
 
-    return updatedSuperhero;
+        return updatedSuperhero;
+    }catch(err){
+        handlePrismaNotFound(err, "Superhero not found!")
+    }
 }
 
-export const remove = async (id: number) => {
-    await prisma.superhero.delete({where: {id}});
+export const remove = async (id: number): Promise<void> => {
+    try{
+        await prisma.superhero.delete({where: {id}});
+    }catch(err){
+        handlePrismaNotFound(err, "Superhero not found!")
+    }
+}
+
+export const list = async(page: number, limit: number): Promise<PaginatedResponse<SuperheroListItemResponse>> => {
+    const skip = (page - 1) * limit;
+
+    const [total, heroes] = await prisma.$transaction([
+        prisma.superhero.count(),
+        prisma.superhero.findMany({
+            skip,
+            take: limit,
+            orderBy: {id: 'asc'},
+            select: {
+                id: true,
+                nickname: true
+            }
+        })
+    ])
+
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+
+    return {
+        items: heroes,
+        page,
+        limit,
+        total,
+        totalPages,
+    };
 }

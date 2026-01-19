@@ -18,5 +18,13 @@ export const UpdateSuperheroSchema = z.object({
     catch_phrase: z.string().trim().min(1, "catch_phrase cannot be empty").optional()
 })
 
+export const ListSuperheroesQuerySchema = z
+    .object({
+        page: z.coerce.number().int().min(1).default(1),
+        limit: z.coerce.number().int().min(1).max(50).default(5),
+    })
+    .strict();
+
 export type CreateSuperheroDto = z.infer<typeof CreateSuperheroSchema>
 export type UpdateSuperheroDto = z.infer<typeof UpdateSuperheroSchema>
+export type ListSuperheroesQueryDto = z.infer<typeof ListSuperheroesQuerySchema>;
