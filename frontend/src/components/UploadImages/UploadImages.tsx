@@ -31,13 +31,12 @@ export const UploadImages = (
 ) => {
     const mainInputRef = useRef<HTMLInputElement | null>(null);
     const galleryInputRef = useRef<HTMLInputElement | null>(null);
+    const objectMainPreview = useObjectUrl(mainFile);
 
     const mainPreview =
-        mainFile
-            ? useObjectUrl(mainFile)
-            : existingMainUrl
-                ? `http://localhost:3000${existingMainUrl}`
-                : null;
+        objectMainPreview ??
+        (existingMainUrl ? `http://localhost:3000${existingMainUrl}` : null);
+
     const galleryPreviews = useObjectUrls(galleryFiles);
 
     const openMainPicker = () => mainInputRef.current?.click();
