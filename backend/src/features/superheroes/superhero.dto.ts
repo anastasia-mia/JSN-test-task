@@ -25,6 +25,10 @@ export const ListSuperheroesQuerySchema = z
     })
     .strict();
 
+export const SetMainSchema = z.object({
+    imageId: z.coerce.number().int().nullable(),
+});
+
 export type CreateSuperheroDto = z.infer<typeof CreateSuperheroSchema>
 export type UpdateSuperheroDto = z.infer<typeof UpdateSuperheroSchema>
 export type ListSuperheroesQueryDto = z.infer<typeof ListSuperheroesQuerySchema>;

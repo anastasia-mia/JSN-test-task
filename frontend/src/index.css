@@ -126,9 +126,15 @@ button{
 }
 
 button:hover{
-  color: aliceblue;
-  border-color: azure;
+  color: #1f2937;
+  border-color: #1f2937;
   transition: all 0.3s ease-in-out;
+}
+
+button:disabled{
+  color: darkgrey;
+  border: 3px solid darkgrey;
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 1280px) {

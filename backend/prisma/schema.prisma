@@ -15,7 +15,9 @@ model Superhero{
   origin_description String
   superpowers String[]
   catch_phrase String
-  images Image[]
+  images Image[] @relation("SuperheroImages")
+  mainImageId        Int? @unique
+  mainImage          Image?    @relation("SuperheroMainImage", fields: [mainImageId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -24,6 +26,7 @@ model Image {
   id Int @id @default(autoincrement())
   url String
   superheroId Int
-  superhero Superhero @relation(fields: [superheroId], references: [id], onDelete: Cascade)
+  superhero Superhero @relation("SuperheroImages", fields: [superheroId], references: [id], onDelete: Cascade)
+  mainFor     Superhero? @relation("SuperheroMainImage")
   createdAt DateTime @default(now())
 }

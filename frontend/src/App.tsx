@@ -12,9 +12,9 @@ function App() {
         <Route path="/" element={<GreetingPage />} />
         <Route path="/superheroes" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="new" element={<SuperheroFormPage />} />
+          <Route path="new" element={<SuperheroFormPage mode={"create"}/>} />
           <Route path=":id" element={<SuperheroDetailsPage />} />
-          <Route path=":id/edit" element={<SuperheroFormPage />} />
+          <Route path=":id/edit" element={<SuperheroFormPage mode={"edit"}/>} />
         </Route>
       </Routes>
     </Router>

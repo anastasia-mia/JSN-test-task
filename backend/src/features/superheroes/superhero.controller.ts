@@ -2,13 +2,14 @@ import {Request, Response, NextFunction} from "express";
 import {
     CreateSuperheroDto,
     CreateSuperheroSchema,
-    ListSuperheroesQueryDto, ListSuperheroesQuerySchema,
+    ListSuperheroesQueryDto, ListSuperheroesQuerySchema, SetMainSchema,
     UpdateSuperheroDto,
     UpdateSuperheroSchema
 } from "./superhero.dto";
 import { ZodError } from "zod";
 import {ApiError} from "../../shared/errors/api-error";
 import * as superheroService from "./superhero.service";
+import path from "path";
 
 function handleZodOrPass(err: unknown, next: NextFunction) {
     if (err instanceof ZodError) {
@@ -84,3 +85,64 @@ export const getList = async(req: Request, res: Response, next: NextFunction) =>
         return handleZodOrPass(err, next)
     }
 }
+
+export const uploadImages = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const heroId = Number(req.params.id);
+        if (Number.isNaN(heroId)) throw ApiError.badRequest("Id is not a number");
+
+        const files = (req.files ?? []) as Express.Multer.File[];
+        if (!files.length) throw ApiError.badRequest("No files uploaded");
+
+        const urls = files.map((f) => `/uploads/${path.basename(f.path)}`);
+        const updated = await superheroService.addImages(heroId, urls);
+
+        return res.status(201).json(updated);
+    } catch (err) {
+        return handleZodOrPass(err, next);
+    }
+};
+
+export const uploadMainImage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const heroId = Number(req.params.id);
+        if (Number.isNaN(heroId)) throw ApiError.badRequest("Id is not a number");
+
+        const file = req.file as Express.Multer.File | undefined;
+        if (!file) throw ApiError.badRequest("No file uploaded");
+
+        const url = `/uploads/${path.basename(file.path)}`;
+        const updated = await superheroService.addMainImage(heroId, url);
+
+        return res.status(201).json(updated);
+    } catch (err) {
+        return handleZodOrPass(err, next);
+    }
+};
+
+export const setMainImage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const heroId = Number(req.params.id);
+        if (Number.isNaN(heroId)) throw ApiError.badRequest("Id is not a number");
+
+        const { imageId } = SetMainSchema.parse(req.body);
+        const updated = await superheroService.setMainImage(heroId, imageId);
+
+        return res.status(200).json(updated);
+    } catch (err) {
+        return handleZodOrPass(err, next);
+    }
+};
+
+export const deleteImage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const heroId = Number(req.params.id);
+        const imageId = Number(req.params.imageId);
+        if (Number.isNaN(heroId) || Number.isNaN(imageId)) throw ApiError.badRequest("Id is not a number");
+
+        await superheroService.deleteImage(heroId, imageId);
+        return res.status(204).send();
+    } catch (err) {
+        return handleZodOrPass(err, next);
+    }
+};

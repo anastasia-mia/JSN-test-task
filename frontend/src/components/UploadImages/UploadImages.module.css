@@ -1,0 +1,81 @@
+.images{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+
+.images-main-upload, .images-gallery-upload{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.images-main-upload input, .images-gallery-upload input{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.images-main-upload p, .images-gallery-upload p{
+    font-size: 24px;
+}
+
+.images-upload{
+    display: inline-flex;
+    gap: 10px;
+    border: 1px solid darkgrey;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+    align-items: center;
+    font-size: 18px;
+}
+
+.images-upload:hover{
+    border-color: #1f2937;
+    color: #1f2937;
+}
+
+.images-main-image{
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.images-gallery-list{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 25px;
+    height: 100px;
+    margin-top: 25px;
+}
+
+.images-thumb{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.images-thumb img{
+    height: 100px;
+    display: flex;
+    align-self: center;
+}
+
+.images-thumb span{
+    color: red;
+    font-weight: 600;
+    font-size: 32px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}

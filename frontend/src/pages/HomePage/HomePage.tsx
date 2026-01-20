@@ -43,6 +43,18 @@ export const HomePage = () => {
                             <li key={h.id}
                                 onClick={() => navigate(`/superheroes/${h.id}`)}
                             >
+                                <div className={styles["superheroes-image"]}>
+                                    {h.mainImage?.url ? (
+                                        <img
+                                            src={`http://localhost:3000${h.mainImage.url}`}
+                                            alt={`${h.nickname} main image`}
+                                            width={120}
+                                            height={120}
+                                        />
+                                    ) : (
+                                        <p>No image</p>
+                                    )}
+                                </div>
                                 {h.nickname}
                             </li>
                         ))}
