@@ -8,23 +8,25 @@ export const GreetingPage = () => {
     const navigate= useNavigate();
 
     return (
-        <div className="wrapper">
-            <div className="container">
-                <main className={styles["greeting"]}>
-                    <h1 className={styles["greeting_title"]}>Superhero Database</h1>
-                    <p className={styles["greeting_text"]}>
-                        This application allows you to manage a list of superheroes, including
-                        their personal details, superpowers, and images.
-                    </p>
-                    <button onClick={() => navigate("/superheroes")}>
-                        Proceed to superheroes
-                    </button>
-                    <div className={styles["greeting_heroes"]}>
-                        <img src={superHero1} alt="Superhero" />
-                        <img src={superHero2} alt="Superhero" />
-                        <img src={superHero3} alt="Superhero" />
-                    </div>
-                </main>
+        <div className={styles["greeting"]}>
+            <div className="wrapper">
+                <div className="container">
+                    <main className={styles["greeting-container"]}>
+                        <h1 className={styles["greeting-title"]}>Superhero Database</h1>
+                        <p className={styles["greeting-text"]}>
+                            This application allows you to manage a list of superheroes, including
+                            their personal details, superpowers, and images.
+                        </p>
+                        <button onClick={() => navigate("/superheroes")}>
+                            Proceed to superheroes
+                        </button>
+                        <div className={styles["greeting-heroes"]}>
+                            <img src={superHero1} alt="Superhero" />
+                            <img src={superHero2} alt="Superhero" />
+                            <img src={superHero3} alt="Superhero" />
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
     )

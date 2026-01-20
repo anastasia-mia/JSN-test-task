@@ -1,0 +1,119 @@
+.superheroes{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+}
+.superheroes-title{
+    font-size: 36px;
+}
+
+.superheroes-add{
+    font-size: 28px;
+    color: #a9a9a9;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+
+.superheroes-add span{
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.superheroes-add:hover{
+    filter: brightness(0.5);
+}
+
+.superheroes-collection{
+    width: 100%
+}
+
+.superheroes-collection ul{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.superheroes-collection li{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 300px;
+    text-align: center;
+    border: 2px solid #1f2937;
+    color: #B8850F;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.superheroes-collection li:hover{
+    transform: scale(1.02);
+}
+
+.superheroes-pagination{
+    border: none !important;
+    justify-content: center !important;
+    color: #1f2937 !important;
+    font-size: 22px !important;
+    box-shadow: none !important;
+    transform: none !important;
+    font-weight: 400 !important;
+}
+
+.superheroes-pagination div{
+    padding: 15px;
+}
+
+.superheroes-collection li:last-child div:hover{
+    font-weight: 600;
+}
+
+.superheroes-loading, .superheroes-error{
+    font-weight: 600;
+    font-size: 28px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.superheroes-loading{
+    color: #B8850F;
+}
+
+.superheroes-error{
+    color: red;
+}
+
+@media screen and (max-width: 1024px){
+    .superheroes-collection ul{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 576px){
+    .superheroes-title{
+        font-size: 24px;
+    }
+
+    .superheroes-add{
+        font-size: 18px;
+    }
+
+    .superheroes-add span{
+        font-size: 26px;
+    }
+
+    .superheroes-collection ul{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .superheroes-pagination{
+        font-size: 16px !important;
+    }
+}
