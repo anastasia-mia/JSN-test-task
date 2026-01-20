@@ -1,11 +1,11 @@
 import styles from "./GreetingPage.module.css";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import superHero1 from '../../assets/superhero1.webp'
 import superHero2 from '../../assets/superhero2.webp'
 import superHero3 from '../../assets/superhero3.webp'
 
 export const GreetingPage = () => {
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
     return (
         <div className={styles["greeting"]}>
@@ -21,9 +21,9 @@ export const GreetingPage = () => {
                             Proceed to superheroes
                         </button>
                         <div className={styles["greeting-heroes"]}>
-                            <img src={superHero1} alt="Superhero" />
-                            <img src={superHero2} alt="Superhero" />
-                            <img src={superHero3} alt="Superhero" />
+                            <img src={superHero1} alt="Superhero"/>
+                            <img src={superHero2} alt="Superhero"/>
+                            <img src={superHero3} alt="Superhero"/>
                         </div>
                     </main>
                 </div>

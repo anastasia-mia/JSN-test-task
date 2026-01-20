@@ -9,7 +9,7 @@ export const HomePage = () => {
     const limit = 5;
     const [page, setPage] = useState<number>(1);
     const [allItems, setAllItems] = useState<Superhero[]>([]);
-    const { data, isLoading, error} = useGetSuperheroesQuery({ page, limit});
+    const {data, isLoading, error} = useGetSuperheroesQuery({page, limit});
 
     useEffect(() => {
         if (!data?.items) return;
@@ -22,7 +22,7 @@ export const HomePage = () => {
     }, [data?.items]);
 
     const canLoadMore = useMemo(() => {
-        if(!data) return false;
+        if (!data) return false;
         return allItems.length < data.total;
     }, [data, allItems.length]);
 
@@ -52,7 +52,7 @@ export const HomePage = () => {
                                             height={120}
                                         />
                                     ) : (
-                                        <p>No image</p>
+                                        <p className={styles["superheroes-no-image"]}>No image</p>
                                     )}
                                 </div>
                                 {h.nickname}

@@ -90,7 +90,7 @@ export const superheroesApi = createApi({
             invalidatesTags: (_r, _e, {id}) => [{type: "Superhero", id}],
         }),
         uploadMainImage: builder.mutation<Superhero, { id: string; file: File }>({
-            query: ({ id, file }) => {
+            query: ({id, file}) => {
                 const fd = new FormData();
                 fd.append("image", file);
                 return {
@@ -99,12 +99,12 @@ export const superheroesApi = createApi({
                     body: fd,
                 };
             },
-            invalidatesTags: (_r, _e, arg) => [{ type: "Superhero", id: arg.id }],
+            invalidatesTags: (_r, _e, arg) => [{type: "Superhero", id: arg.id}],
         }),
 
         deleteHeroImage: builder.mutation<
             { ok: true },
-            { heroId: string; imageId: string }
+            { heroId: string; imageId: number }
         >({
             query: ({heroId, imageId}) => ({
                 url: `/superheroes/${heroId}/images/${imageId}`,

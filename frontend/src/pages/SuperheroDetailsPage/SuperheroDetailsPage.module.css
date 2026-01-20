@@ -1,0 +1,75 @@
+.details-top{
+    display: flex;
+    gap: 40px;
+}
+
+.details-ImageBox, .details-no-photo{
+    width: 50%;
+    min-width: 50%;
+    border: 2px solid #1f2937;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.details-no-photo{
+    text-align: center;
+    padding-top: 150px;
+}
+
+.details-ImageBox img{
+    object-fit: contain;
+    width: 100%;
+}
+
+dt {
+    font-weight: 600;
+    color: #374151;
+    font-size: 32px;
+    padding-bottom: 10px;
+}
+
+dd {
+    color: #111827;
+    margin-left: 20px;
+    padding-bottom: 15px;
+    font-size: 18px;
+}
+
+.details-bottom{
+    padding-top: 40px;
+}
+
+.details-section-gallery{
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.details-gallery{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    height: 250px;
+    width: 100%;
+}
+
+.details-thumb{
+    height: 250px;
+}
+
+.details-thumb img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.details-actions{
+    padding-top: 50px;
+    display: flex;
+    gap: 15px;
+}
+
+.details-dangerBtn{
+    border-color: red;
+    color: red;
+}

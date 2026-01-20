@@ -1,10 +1,10 @@
 import styles from "./Header.module.css";
 import {useNavigate} from "react-router-dom";
 
-export const Header= () => {
-    const navigate= useNavigate();
+export const Header = () => {
+    const navigate = useNavigate();
 
-    return(
+    return (
         <header className={styles["header"]}>
             <div className={"container"}>
                 <p className={styles["header-logo"]}

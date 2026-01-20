@@ -1,10 +1,17 @@
-// import sprite from '../../assets/sprite.svg';
 import styles from "./UploadImages.module.css";
 import {useMemo, useRef} from "react";
 import {useObjectUrl} from "../../helpers/useObjectUrl.ts";
 import {useObjectUrls} from "../../helpers/useObjectUrls.ts";
 
+type ExistingImage = {
+    id: number;
+    url: string;
+};
+
 type Props = {
+    existingMainUrl?: string | null;
+    existingGallery?: ExistingImage[];
+    onDeleteExistingImage?: (imageId: number) => void | Promise<void>;
     mainFile: File | null;
     galleryFiles: File[];
     onMainChange: (file: File | null) => void;
@@ -13,6 +20,9 @@ type Props = {
 
 export const UploadImages = (
     {
+        existingMainUrl,
+        onDeleteExistingImage,
+        existingGallery,
         mainFile,
         galleryFiles,
         onMainChange,
@@ -22,7 +32,12 @@ export const UploadImages = (
     const mainInputRef = useRef<HTMLInputElement | null>(null);
     const galleryInputRef = useRef<HTMLInputElement | null>(null);
 
-    const mainPreview = useObjectUrl(mainFile);
+    const mainPreview =
+        mainFile
+            ? useObjectUrl(mainFile)
+            : existingMainUrl
+                ? `http://localhost:3000${existingMainUrl}`
+                : null;
     const galleryPreviews = useObjectUrls(galleryFiles);
 
     const openMainPicker = () => mainInputRef.current?.click();
@@ -110,6 +125,17 @@ export const UploadImages = (
                     </div>
                 </div>
                 <div className={styles["images-gallery-list"]}>
+                    {existingGallery?.map((img) => (
+                        <div key={`existing-${img.id}`} className={styles["images-thumb"]}>
+                            <img src={`http://localhost:3000${img.url}`} alt="Gallery image" />
+                            <span
+                                aria-label={`Remove file`}
+                                onClick={() => onDeleteExistingImage?.(img.id)}
+                            >
+                             ×
+                        </span>
+                        </div>
+                    ))}
                     {galleryItems.map((it) => (
                         <div key={it.key} className={styles["images-thumb"]}>
                             {it.preview ? (

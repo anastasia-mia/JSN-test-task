@@ -6,7 +6,7 @@ import {Footer} from "../Footer/Footer.tsx";
 export const Layout = () => {
     return (
         <>
-            <Header />
+            <Header/>
             <div className="content-wrap">
                 <div className="wrapper">
                     <div className="container">

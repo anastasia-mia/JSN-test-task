@@ -1,11 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import styles from "./SuperheroFormPage.module.css";
 import {
     useCreateSuperheroMutation,
     useGetSuperheroQuery,
     useUpdateSuperheroMutation,
     useUploadMainImageMutation,
-    useUploadImagesMutation
+    useUploadImagesMutation, useDeleteHeroImageMutation
 } from "../../store/superheroApi.ts";
 import {useEffect, useMemo, useState} from "react";
 import {SuperpowersInput} from "../../components/SuperpowersInput/SuperpowersInput.tsx";
@@ -29,14 +29,14 @@ const emptyForm: FormState = {
     superpowers: [],
 };
 
-export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
+export const SuperheroFormPage = ({mode}: { mode: Mode }) => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const {id} = useParams();
 
     const isEdit = mode === "edit";
     const heroId = id ?? "";
 
-    const { data: hero } = useGetSuperheroQuery(heroId, {
+    const {data: hero} = useGetSuperheroQuery(heroId, {
         skip: !isEdit || !heroId,
     });
 
@@ -48,6 +48,10 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
 
     const [uploadMainImage, uploadMainState] = useUploadMainImageMutation();
     const [uploadGallery, uploadGalleryState] = useUploadImagesMutation();
+    const [deleteImage] = useDeleteHeroImageMutation();
+
+    const existingMainUrl = hero?.mainImage?.url ?? null;
+    const existingGallery = hero?.images ?? [];
 
     const isSaving =
         createState.isLoading ||
@@ -87,7 +91,7 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
     ]);
 
     const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
-        setForm((prev) => ({ ...prev, [key]: value }));
+        setForm((prev) => ({...prev, [key]: value}));
     };
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -108,16 +112,16 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
                 const created = await createHero(payload).unwrap();
                 idToUse = String(created.id);
             } else {
-                await updateHero({ id: heroId, body: payload }).unwrap();
+                await updateHero({id: heroId, body: payload}).unwrap();
             }
 
             if (mainFile) {
-                await uploadMainImage({ id: idToUse, file: mainFile }).unwrap();
+                await uploadMainImage({id: idToUse, file: mainFile}).unwrap();
                 setMainFile(null);
             }
 
             if (galleryFiles.length > 0) {
-                await uploadGallery({ id: idToUse, files: galleryFiles }).unwrap();
+                await uploadGallery({id: idToUse, files: galleryFiles}).unwrap();
                 setGalleryFiles([]);
             }
 
@@ -126,6 +130,20 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
             console.error(err);
         }
     };
+
+    const onDeleteExistingImage = async (imageId: number) => {
+        if (!heroId) return;
+
+        const ok = window.confirm("Delete this image?");
+        if (!ok) return;
+
+        try {
+            await deleteImage({ heroId, imageId }).unwrap();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
 
     return (
         <>
@@ -160,6 +178,13 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
                                 rows={4}
                             />
                         </label>
+                        <div className={styles["form-field"]}>
+                            <span>Superpowers *</span>
+                            <SuperpowersInput
+                                value={form.superpowers}
+                                onChange={(next) => setField("superpowers", next)}
+                            />
+                        </div>
                         <label className={styles["form-field"]}>
                             <span>Catch phrase *</span>
                             <input
@@ -168,13 +193,6 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
                                 placeholder='“Look, up in the sky…”'
                             />
                         </label>
-                        <div className={styles["form-field"]}>
-                            <span>Superpowers *</span>
-                            <SuperpowersInput
-                                value={form.superpowers}
-                                onChange={(next) => setField("superpowers", next)}
-                            />
-                        </div>
                         <div className={styles["form-actions"]}>
                             <button type="button" onClick={() => navigate(-1)} className={styles.secondaryBtn}>
                                 Cancel
@@ -190,6 +208,9 @@ export const SuperheroFormPage = ({mode}: {mode: Mode}) => {
                     </section>
                     <section>
                         <UploadImages
+                            existingMainUrl={existingMainUrl}
+                            onDeleteExistingImage={onDeleteExistingImage}
+                            existingGallery={existingGallery}
                             mainFile={mainFile}
                             galleryFiles={galleryFiles}
                             onMainChange={setMainFile}

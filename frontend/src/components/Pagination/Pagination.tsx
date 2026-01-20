@@ -5,7 +5,7 @@ type Props = {
     onPageChange: (page: number) => void;
 };
 
-export function Pagination({ page, limit, total, onPageChange }: Props) {
+export function Pagination({page, limit, total, onPageChange}: Props) {
     if (total <= limit) return null;
 
     return (

@@ -32,6 +32,11 @@
     margin-top: 50px;
 }
 
+.greeting button:hover{
+    color: white;
+    border: 3px solid white;
+}
+
 .greeting-heroes{
     display: flex;
     position: absolute;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 export function useObjectUrl(file?: File | null) {
     const [url, setUrl] = useState<string | null>(null);
